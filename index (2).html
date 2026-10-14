@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Code Library</title>
+<style>
+:root { color-scheme: light; --blue:#2563eb; --ink:#172033; --muted:#64748b; --line:#e2e8f0; }
+* { box-sizing:border-box; }
+body { margin:0; background:#f5f7fb; color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+header { background:#172554; color:white; padding:28px 20px; }
+.header-inner { max-width:1100px; margin:auto; }
+header h1 { margin:0 0 8px; font-size:28px; }
+header p { margin:0; color:#dbeafe; }
+main { max-width:1100px; margin:24px auto; padding:0 16px; display:grid; grid-template-columns:290px minmax(0,1fr); gap:20px; }
+.panel { background:white; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.sidebar { padding:16px; }
+.sidebar h2 { font-size:16px; margin:0 0 12px; }
+#search { width:100%; padding:10px 11px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; margin-bottom:12px; }
+.code-list { display:grid; gap:7px; }
+.code-item { text-align:left; width:100%; padding:12px; border:1px solid transparent; border-radius:8px; background:#f8fafc; cursor:pointer; color:var(--ink); }
+.code-item:hover { background:#eff6ff; }
+.code-item.active { background:#eff6ff; border-color:#93c5fd; }
+.code-item strong { display:block; font-size:14px; margin-bottom:5px; }
+.code-item small { color:var(--muted); font-size:12px; }
+.viewer { min-width:0; }
+.viewer-head { padding:18px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.viewer-head h2 { margin:0 0 5px; font-size:20px; }
+.viewer-head p { margin:0; font-size:13px; color:var(--muted); }
+.actions { display:flex; gap:8px; }
+button.action { border:0; border-radius:8px; padding:10px 13px; font-weight:600; cursor:pointer; }
+#copyBtn { background:var(--blue); color:white; }
+#copyBtn:hover { background:#1d4ed8; }
+#downloadBtn { background:#e2e8f0; color:#1e293b; }
+pre { margin:0; padding:20px; min-height:330px; max-height:65vh; overflow:auto; background:#0f172a; color:#e2e8f0; font:13px/1.65 Consolas,Monaco,monospace; white-space:pre; tab-size:4; }
+.status { min-height:20px; padding:0 20px 15px; color:#15803d; font-size:13px; }
+.empty { color:var(--muted); padding:20px; }
+@media(max-width:720px) { main { grid-template-columns:1fr; margin-top:16px; } pre { min-height:250px; max-height:60vh; } header h1 { font-size:24px; } }
+</style>
+</head>
+<body>
+<header><div class="header-inner"><h1>My Code Library</h1><p>Your saved programming codes — open, view, and copy.</p></div></header>
+<main>
+  <aside class="panel sidebar">
+    <h2>Saved codes (<span id="count">6</span>)</h2>
+    <input id="search" type="search" placeholder="Search code names..." aria-label="Search code names">
+    <div id="codeList" class="code-list"></div>
+  </aside>
+  <section class="panel viewer">
+    <div class="viewer-head">
+      <div><h2 id="codeTitle">CalculatorController</h2><p id="codeLanguage">C# · ASP.NET Core</p></div>
+      <div class="actions"><button class="action" id="copyBtn">Copy Code</button><button class="action" id="downloadBtn">Save .txt</button></div>
+    </div>
+    <pre><code id="codeDisplay"></code></pre>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </section>
+</main>
+<script>
+const codes = [{"name": "CalculatorController", "language": "C# · ASP.NET Core", "code": "using Microsoft.AspNetCore.Mvc;\n\nnamespace Calculator10.Controllers\n\n{\n\n[ApiController]\n\n[Route(\"[controller]\")]\n\npublic class CalculatorController: ControllerBase\n\n{\n\n[HttpGet(\"Add\")]\n\npublic int Add(int a, int b)\n\n{\n\nreturn a + b;\n\n}\n\n}\n\n}"}, {"name": "SoftwareController", "language": "C# · ASP.NET Core", "code": "using Microsoft.AspNetCore.Mvc;\nusing Microsoft.Extensions.Logging;\nusing System.Linq;\n\nnamespace Software.Controllers\n{\n    [ApiController]\n    [Route(\"[controller]\")]\n    public class SoftwareController : ControllerBase\n    {\n        private readonly ILogger<SoftwareController> _logger;\n\n        private static readonly int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };\n\n        public SoftwareController(ILogger<SoftwareController> logger)\n        {\n            _logger = logger;\n        }\n\n        [HttpGet]\n        public IActionResult GetSoftware()\n        {\n            _logger.LogInformation(\"Returning list of software numbers.\");\n\n            return Ok(new { SoftwareNumbers = numbers });\n        }\n\n        [HttpPost]\n        public IActionResult PostNumbers([FromBody] int[] inputNumbers)\n        {\n            if (inputNumbers == null || inputNumbers.Length == 0)\n            {\n                return BadRequest(\"No numbers provided.\");\n            }\n\n            int sum = inputNumbers.Sum();\n\n            _logger.LogInformation(\"Received numbers: {Numbers}. Calculated sum: {Sum}\", string.Join(\",\", inputNumbers), sum);\n\n            return Ok(new { sum });\n        }\n    }\n}"}, {"name": "Entity", "language": "Java · Spring Data MongoDB", "code": "package com.example.book.entity;\n\nimport org.springframework.data.annotation.Id;\nimport org.springframework.data.mongodb.core.mapping.Document;\n\n@Document(collection = \"Book\")\npublic class BookEntity {\n\n    @Id\n    private int id;\n\n    private String name;\n    private String author;\n    private double price;\n\n    public BookEntity() {\n    }\n\n    public BookEntity(int id, String name, String author, double price) {\n        this.id = id;\n        this.name = name;\n        this.author = author;\n        this.price = price;\n    }\n\n    public int getId() {\n        return id;\n    }\n\n    public void setId(int id) {\n        this.id = id;\n    }\n\n    public String getName() {\n        return name;\n    }\n\n    public void setName(String name) {\n        this.name = name;\n    }\n\n    public String getAuthor() {\n        return author;\n    }\n\n    public void setAuthor(String author) {\n        this.author = author;\n    }\n\n    public double getPrice() {\n        return price;\n    }\n\n    public void setPrice(double price) {\n        this.price = price;\n    }\n}"}, {"name": "Controller", "language": "Java · Spring Boot", "code": "package com.example.book.controller;\n\nimport java.util.List;\n\nimport org.springframework.web.bind.annotation.*;\n\nimport com.example.book.entity.BookEntity;\nimport com.example.book.repository.BookRepository;\n\n@RestController\npublic class BookController {\n\n    private final BookRepository repository;\n\n    BookController(BookRepository repository) {\n        this.repository = repository;\n    }\n\n    @GetMapping(\"/findAllBooks\")\n    public List<BookEntity> getAllBooks() {\n        return repository.findAll();\n    }\n\n    @PostMapping(\"/addBook\")\n    public BookEntity addBook(@RequestBody BookEntity book) {\n        return repository.save(book);\n    }\n\n    @PutMapping(\"/update/{id}\")\n    public BookEntity updateBook(@PathVariable int id,\n                           @RequestBody BookEntity book) {\n\n        book.setId(id);\n        return repository.save(book);\n    }\n\n    @DeleteMapping(\"/delete/{id}\")\n    public String deleteBook(@PathVariable int id) {\n\n        repository.deleteById(id);\n\n        return \"Book deleted successfully\";\n    }\n}"}, {"name": "Repository", "language": "Java · Spring Boot / MongoDB", "code": "package com.example.demo;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.data.mongodb.repository.config.EnableMongoRepositories;\n\n@SpringBootApplication(scanBasePackages = \"com.example\")\n@EnableMongoRepositories(basePackages = \"com.example.book.repository\")\npublic class DemoApplication {\n\n    public static void main(String[] args) {\n        SpringApplication.run(DemoApplication.class, args);\n    }\n}\n\npackage com.example.book.repository;\n\nimport org.springframework.data.mongodb.repository.MongoRepository;\nimport com.example.book.entity.BookEntity;\n\npublic interface BookRepository extends MongoRepository<BookEntity, Integer> {\n}"}, {"name": "Properties", "language": "Spring Boot configuration", "code": "spring.application.name=demo\nspring.mongodb.uri=mongodb://localhost:27017/BookStore\nserver.port=8081"}];
+let selectedIndex = 0;
+const list = document.getElementById('codeList');
+const search = document.getElementById('search');
+const title = document.getElementById('codeTitle');
+const language = document.getElementById('codeLanguage');
+const display = document.getElementById('codeDisplay');
+const status = document.getElementById('status');
+function renderList() {
+  const query = search.value.trim().toLowerCase();
+  list.innerHTML = '';
+  const matches = codes.map((item,index)=>({...item,index})).filter(item => (item.name+' '+item.language).toLowerCase().includes(query));
+  document.getElementById('count').textContent = codes.length;
+  if (!matches.length) { list.innerHTML = '<div class="empty">No matching codes found.</div>'; return; }
+  matches.forEach(item => {
+    const button = document.createElement('button');
+    button.className = 'code-item' + (item.index === selectedIndex ? ' active' : '');
+    const strong = document.createElement('strong'); strong.textContent = item.name;
+    const small = document.createElement('small'); small.textContent = item.language;
+    button.append(strong,small);
+    button.addEventListener('click',()=>showCode(item.index));
+    list.appendChild(button);
+  });
+}
+function showCode(index) {
+  selectedIndex = index;
+  const item = codes[index];
+  title.textContent = item.name;
+  language.textContent = item.language;
+  display.textContent = item.code;
+  status.textContent = '';
+  renderList();
+}
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const text = codes[selectedIndex].code;
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = 'Code copied. You can now paste it.';
+  } catch (err) {
+    const area = document.createElement('textarea'); area.value = text; area.style.position='fixed'; area.style.opacity='0';
+    document.body.appendChild(area); area.select();
+    const ok = document.execCommand('copy'); area.remove();
+    status.textContent = ok ? 'Code copied. You can now paste it.' : 'Copy was blocked by the browser. Select the code and copy it manually.';
+  }
+});
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const item = codes[selectedIndex];
+  const blob = new Blob([item.code], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=item.name.replace(/[^a-z0-9_-]/gi,'_')+'.txt'; a.click();
+  URL.revokeObjectURL(url); status.textContent = 'Saved a text copy of ' + item.name + '.';
+});
+search.addEventListener('input',renderList);
+showCode(0);
+</script>
+</body>
+</html>
